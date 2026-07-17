@@ -6,17 +6,17 @@ export function parseCommands(input: string): NavigationCommand[] {
   return input
     .split('\n')
     .filter((line) => line !== '')
-   .map((line) => {
-    const [direction, distance] = line.split(' ');
+    .map((line) => {
+      const parts = line.split(' ');
 
-    if (direction === undefined || distance === undefined) {
+      if (parts.length !== 2) {
         throw new Error(`Invalid command: ${line}`);
-    }
+      }
 
-    return {
-        direction: parseDirection(direction),
-        distance: parseDistance(distance),
-    };
+      return {
+        direction: parseDirection(parts[0]!),
+        distance: parseDistance(parts[1]!),
+      };
     });
 }
 
@@ -29,11 +29,9 @@ function parseDirection(value: string): Direction {
 }
 
 function parseDistance(value: string): number {
-  const distance = Number(value);
-
-  if (Number.isNaN(distance)) {
+  if (!/^\d+$/.test(value)) {
     throw new Error(`Invalid distance: ${value}`);
   }
 
-  return distance;
+  return Number(value);
 }
