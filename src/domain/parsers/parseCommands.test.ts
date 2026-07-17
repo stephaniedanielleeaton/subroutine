@@ -128,133 +128,116 @@ up 2
   });
 
   it('throws for an invalid direction', () => {
-    expect(() => parseCommands('backward 5')).toThrow(
-      'Invalid direction: backward',
-    );
+    expect(() => parseCommands('backward 5')).toThrow('Invalid direction: backward');
   });
 
   it('throws for an invalid distance', () => {
-    expect(() => parseCommands('forward five')).toThrow(
-      'Invalid distance: five',
-    );
+    expect(() => parseCommands('forward five')).toThrow('Invalid distance: five');
   });
 
   it('throws for a missing direction', () => {
-    expect(() => parseCommands('5')).toThrow(
-      'Invalid command: 5',
-    );
+    expect(() => parseCommands('5')).toThrow('Invalid command: 5');
   });
 
   it('throws for a missing distance', () => {
-    expect(() => parseCommands('forward')).toThrow(
-      'Invalid command: forward',
-    );
+    expect(() => parseCommands('forward')).toThrow('Invalid command: forward');
   });
 
   it('throws for too many values', () => {
-    expect(() => parseCommands('forward 5 extra')).toThrow(
-      'Invalid command: forward 5 extra',
-    );
+    expect(() => parseCommands('forward 5 extra')).toThrow('Invalid command: forward 5 extra');
   });
 
   it('throws for a negative distance', () => {
-    expect(() => parseCommands('forward -5')).toThrow(
-      'Invalid distance: -5',
-    );
+    expect(() => parseCommands('forward -5')).toThrow('Invalid distance: -5');
   });
 
   it('throws for a decimal distance', () => {
-    expect(() => parseCommands('forward 3.5')).toThrow(
-      'Invalid distance: 3.5',
-    );
+    expect(() => parseCommands('forward 3.5')).toThrow('Invalid distance: 3.5');
   });
 
   it('throws when any command in the input is invalid', () => {
-  expect(() =>
-    parseCommands(`forward 5
+    expect(() =>
+      parseCommands(`forward 5
 down 3
 backward 2
 up 1`),
-  ).toThrow('Invalid direction: backward');
-});
+    ).toThrow('Invalid direction: backward');
+  });
 
-it('throws when any command has an invalid distance', () => {
-  expect(() =>
-    parseCommands(`forward 5
+  it('throws when any command has an invalid distance', () => {
+    expect(() =>
+      parseCommands(`forward 5
 down 3
 up three
 forward 8`),
-  ).toThrow('Invalid distance: three');
-});
+    ).toThrow('Invalid distance: three');
+  });
 
-it('ignores blank lines at the beginning of the input', () => {
-  expect(
-    parseCommands(`
+  it('ignores blank lines at the beginning of the input', () => {
+    expect(
+      parseCommands(`
 
 forward 5
 down 3`),
-  ).toEqual([
-    {
-      direction: 'forward',
-      distance: 5,
-    },
-    {
-      direction: 'down',
-      distance: 3,
-    },
-  ]);
-});
+    ).toEqual([
+      {
+        direction: 'forward',
+        distance: 5,
+      },
+      {
+        direction: 'down',
+        distance: 3,
+      },
+    ]);
+  });
 
-it('ignores blank lines at the end of the input', () => {
-  expect(
-    parseCommands(`forward 5
+  it('ignores blank lines at the end of the input', () => {
+    expect(
+      parseCommands(`forward 5
 down 3
 
 
 `),
-  ).toEqual([
-    {
-      direction: 'forward',
-      distance: 5,
-    },
-    {
-      direction: 'down',
-      distance: 3,
-    },
-  ]);
-});
+    ).toEqual([
+      {
+        direction: 'forward',
+        distance: 5,
+      },
+      {
+        direction: 'down',
+        distance: 3,
+      },
+    ]);
+  });
 
-it('ignores lines containing only whitespace', () => {
-  expect(
-    parseCommands(`forward 5
+  it('ignores lines containing only whitespace', () => {
+    expect(
+      parseCommands(`forward 5
 
    
 down 3`),
-  ).toEqual([
-    {
-      direction: 'forward',
-      distance: 5,
-    },
-    {
-      direction: 'down',
-      distance: 3,
-    },
-  ]);
-});
+    ).toEqual([
+      {
+        direction: 'forward',
+        distance: 5,
+      },
+      {
+        direction: 'down',
+        distance: 3,
+      },
+    ]);
+  });
 
-it('accepts tab-separated values', () => {
-  expect(parseCommands('forward\t5')).toEqual([
-    {
-      direction: 'forward',
-      distance: 5,
-    },
-  ]);
-});
+  it('accepts tab-separated values', () => {
+    expect(parseCommands('forward\t5')).toEqual([
+      {
+        direction: 'forward',
+        distance: 5,
+      },
+    ]);
+  });
 
-it('throws for unrecognized input', () => {
-  expect(() => parseCommands('!@#$%^&*')).toThrow(
-    'Invalid command: !@#$%^&*',
-  );
-});
-
+  it('throws for unrecognized input', () => {
+    expect(() => parseCommands('!@#$%^&*')).toThrow('Invalid command: !@#$%^&*');
+  });
 });
