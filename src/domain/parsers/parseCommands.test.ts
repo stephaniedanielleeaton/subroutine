@@ -34,4 +34,9 @@ up 2`);
     },
   ]);
 });
+
+it('returns an empty array for empty input', () => {
+  expect(parseCommands('')).toEqual([]);
+});
+
 });
