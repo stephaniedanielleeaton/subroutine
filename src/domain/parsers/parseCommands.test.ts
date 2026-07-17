@@ -61,4 +61,28 @@ up 2
   ]);
 });
 
+it('throws for an invalid direction', () => {
+  expect(() => parseCommands('backward 5')).toThrow(
+    'Invalid direction: backward',
+  );
+});
+
+it('throws for an invalid distance', () => {
+  expect(() => parseCommands('forward five')).toThrow(
+    'Invalid distance: five',
+  );
+});
+
+it('throws for a command without a distance', () => {
+  expect(() => parseCommands('forward')).toThrow(
+    'Invalid command: forward',
+  );
+});
+
+it('throws for a command without a direction', () => {
+  expect(() => parseCommands('5')).toThrow(
+    'Invalid command: 5',
+  );
+});
+
 });
