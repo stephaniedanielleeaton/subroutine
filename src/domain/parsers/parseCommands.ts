@@ -5,9 +5,9 @@ import type { Direction } from '../types/Direction';
 export function parseCommands(input: string): NavigationCommand[] {
   return input
     .split('\n')
-    .filter((line) => line !== '')
+    .filter((line) => line.trim() !== '')
     .map((line) => {
-      const parts = line.split(' ');
+      const parts = line.trim().split(/\s+/);
 
       if (parts.length !== 2) {
         throw new Error(`Invalid command: ${line}`);
@@ -21,8 +21,10 @@ export function parseCommands(input: string): NavigationCommand[] {
 }
 
 function parseDirection(value: string): Direction {
-  if (directions.includes(value as Direction)) {
-    return value as Direction;
+  const normalized = value.toLowerCase();
+
+  if (directions.includes(normalized as Direction)) {
+    return normalized as Direction;
   }
 
   throw new Error(`Invalid direction: ${value}`);
