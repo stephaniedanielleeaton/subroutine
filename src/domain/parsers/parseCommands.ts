@@ -1,12 +1,12 @@
 import type { NavigationCommand } from '../models/NavigationCommand';
 
 export function parseCommands(input: string): NavigationCommand[] {
-  const [direction, distance] = input.split(' ');
+  return input.split('\n').map((line) => {
+    const [direction, distance] = line.split(' ');
 
-  return [
-    {
+    return {
       direction: direction as NavigationCommand['direction'],
       distance: Number(distance),
-    },
-  ];
+    };
+  });
 }

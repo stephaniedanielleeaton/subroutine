@@ -13,4 +13,25 @@ describe('parseCommands', () => {
       },
     ]);
   });
+
+  it('parses multiple commands', () => {
+  const result = parseCommands(`forward 5
+down 3
+up 2`);
+
+  expect(result).toEqual([
+    {
+      direction: 'forward',
+      distance: 5,
+    },
+    {
+      direction: 'down',
+      distance: 3,
+    },
+    {
+      direction: 'up',
+      distance: 2,
+    },
+  ]);
+});
 });
