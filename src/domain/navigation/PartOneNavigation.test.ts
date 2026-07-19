@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import { navigate } from './navigate';
+import { PartOneNavigation } from './PartOneNavigation';
 
-describe('navigate', () => {
+describe('PartOneNavigation', () => {
+  const navigation = new PartOneNavigation();
+
   it('returns the origin when no commands are provided', () => {
-    expect(navigate([])).toEqual({
+    expect(navigation.navigate([])).toEqual({
       horizontal: 0,
       depth: 0,
     });
@@ -12,7 +14,7 @@ describe('navigate', () => {
 
   it('moves forward', () => {
     expect(
-      navigate([
+      navigation.navigate([
         {
           direction: 'forward',
           distance: 5,
@@ -26,7 +28,7 @@ describe('navigate', () => {
 
   it('moves down', () => {
     expect(
-      navigate([
+      navigation.navigate([
         {
           direction: 'down',
           distance: 5,
@@ -40,7 +42,7 @@ describe('navigate', () => {
 
   it('moves up', () => {
     expect(
-      navigate([
+      navigation.navigate([
         {
           direction: 'up',
           distance: 5,
@@ -54,7 +56,7 @@ describe('navigate', () => {
 
   it('applies multiple commands in order', () => {
     expect(
-      navigate([
+      navigation.navigate([
         { direction: 'forward', distance: 5 },
         { direction: 'down', distance: 5 },
         { direction: 'forward', distance: 8 },
@@ -70,7 +72,7 @@ describe('navigate', () => {
 
   it('does not change position when moving zero units', () => {
     expect(
-      navigate([
+      navigation.navigate([
         { direction: 'forward', distance: 0 },
         { direction: 'down', distance: 0 },
         { direction: 'up', distance: 0 },
@@ -83,7 +85,7 @@ describe('navigate', () => {
 
   it('accumulates repeated forward commands', () => {
     expect(
-      navigate([
+      navigation.navigate([
         { direction: 'forward', distance: 2 },
         { direction: 'forward', distance: 3 },
         { direction: 'forward', distance: 5 },
