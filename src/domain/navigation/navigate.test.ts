@@ -69,29 +69,28 @@ describe('navigate', () => {
   });
 
   it('does not change position when moving zero units', () => {
-  expect(
-    navigate([
-      { direction: 'forward', distance: 0 },
-      { direction: 'down', distance: 0 },
-      { direction: 'up', distance: 0 },
-    ]),
-  ).toEqual({
-    horizontal: 0,
-    depth: 0,
+    expect(
+      navigate([
+        { direction: 'forward', distance: 0 },
+        { direction: 'down', distance: 0 },
+        { direction: 'up', distance: 0 },
+      ]),
+    ).toEqual({
+      horizontal: 0,
+      depth: 0,
+    });
   });
-});
 
-it('accumulates repeated forward commands', () => {
-  expect(
-    navigate([
-      { direction: 'forward', distance: 2 },
-      { direction: 'forward', distance: 3 },
-      { direction: 'forward', distance: 5 },
-    ]),
-  ).toEqual({
-    horizontal: 10,
-    depth: 0,
+  it('accumulates repeated forward commands', () => {
+    expect(
+      navigate([
+        { direction: 'forward', distance: 2 },
+        { direction: 'forward', distance: 3 },
+        { direction: 'forward', distance: 5 },
+      ]),
+    ).toEqual({
+      horizontal: 10,
+      depth: 0,
+    });
   });
-});
-
 });
