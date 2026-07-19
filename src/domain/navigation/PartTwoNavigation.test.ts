@@ -13,11 +13,7 @@ describe('PartTwoNavigation', () => {
   });
 
   it('moves forward without changing depth when aim is zero', () => {
-    expect(
-      navigation.navigate([
-        { direction: 'forward', distance: 5 },
-      ]),
-    ).toEqual({
+    expect(navigation.navigate([{ direction: 'forward', distance: 5 }])).toEqual({
       horizontal: 5,
       depth: 0,
     });
