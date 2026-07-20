@@ -15,6 +15,7 @@ In addition to horizontal position and depth, you'll also need to track a third 
 Again note that since you're on a submarine, down and up do the opposite of what you might expect: "down" means aiming in the positive direction.
 
 Here's a repeat of the example instructions from part 1:
+
 ```
 forward 5
 down 5
@@ -25,6 +26,7 @@ forward 2
 ```
 
 With our changes to the commands, these example instructions do something different:
+
 ```
     forward 5 adds 5 to your horizontal position, a total of 5. Because your aim is 0, your depth does not change.
     down 5 adds 5 to your aim, resulting in a value of 5.

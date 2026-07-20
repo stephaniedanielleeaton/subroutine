@@ -1,15 +1,35 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 
+import { solveNavigation } from '../application/solveNavigation';
 import { NavigationSolver } from './NavigationSolver';
+import { ParseException } from '../domain/parsers/ParseException';
+
+vi.mock('../application/solveNavigation', () => ({
+  solveNavigation: vi.fn(),
+}));
+
+const solveNavigationMock = vi.mocked(solveNavigation);
 
 describe('NavigationSolver', () => {
-  const sampleInput = `forward 5
-down 5
-forward 8
-up 3
-down 8
-forward 2`;
+  beforeEach(() => {
+    solveNavigationMock.mockReset();
+  });
+
+  function enterInput(input: string) {
+    fireEvent.change(screen.getByRole('textbox'), {
+      target: { value: input },
+    });
+  }
+
+  function clickSolve() {
+    fireEvent.click(screen.getByRole('button', { name: /solve/i }));
+  }
+
+  function solve(input = 'forward 5') {
+    enterInput(input);
+    clickSolve();
+  }
 
   it('renders the navigation console', () => {
     render(<NavigationSolver />);
@@ -27,6 +47,7 @@ forward 2`;
     expect(screen.getByRole('button', { name: /solve/i })).toBeInTheDocument();
 
     expect(screen.getByRole('textbox')).toBeInTheDocument();
+    expect(screen.getByText('--')).toBeInTheDocument();
   });
 
   it('disables solve when the input is empty', () => {
@@ -35,53 +56,125 @@ forward 2`;
     expect(screen.getByRole('button', { name: /solve/i })).toBeDisabled();
   });
 
-  it('allows the user to enter navigation commands', () => {
+  it('enables solve when input is entered', () => {
+    render(<NavigationSolver />);
+
+    enterInput('forward 5');
+
+    expect(screen.getByRole('button', { name: /solve/i })).toBeEnabled();
+  });
+
+  it('updates the navigation input', () => {
     render(<NavigationSolver />);
 
     const textbox = screen.getByRole('textbox');
 
     fireEvent.change(textbox, {
-      target: { value: sampleInput },
+      target: { value: 'forward 5' },
     });
 
-    expect(textbox).toHaveValue(sampleInput);
+    expect(textbox).toHaveValue('forward 5');
   });
 
-  it('solves the sample using the part one strategy', () => {
+  it('displays the result returned by the application', () => {
+    solveNavigationMock.mockReturnValue(1234);
+
     render(<NavigationSolver />);
 
-    fireEvent.change(screen.getByRole('textbox'), {
-      target: { value: sampleInput },
-    });
+    solve();
 
-    fireEvent.click(screen.getByRole('button', { name: /solve/i }));
+    expect(solveNavigationMock).toHaveBeenCalledTimes(1);
+    expect(solveNavigationMock).toHaveBeenCalledWith('forward 5', expect.anything());
 
-    expect(screen.getByText('150')).toBeInTheDocument();
+    expect(screen.getByText('1234')).toBeInTheDocument();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
-  it('solves the sample using the part two strategy', () => {
+  it('clears a previous error after a successful solve', () => {
+    solveNavigationMock
+      .mockImplementationOnce(() => {
+        throw new Error('Regular failure');
+      })
+      .mockReturnValueOnce(1234);
+
+    render(<NavigationSolver />);
+
+    solve();
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Regular failure');
+
+    solve();
+
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(screen.getByText('1234')).toBeInTheDocument();
+  });
+
+  it('clears the previous result when solving fails', () => {
+    solveNavigationMock.mockReturnValueOnce(1234).mockImplementationOnce(() => {
+      throw new Error('Regular failure');
+    });
+
+    render(<NavigationSolver />);
+
+    solve();
+
+    expect(screen.getByText('1234')).toBeInTheDocument();
+
+    solve();
+
+    expect(screen.queryByText('1234')).not.toBeInTheDocument();
+    expect(screen.getByText('--')).toBeInTheDocument();
+  });
+
+  it('shows parse exception messages', () => {
+    solveNavigationMock.mockImplementation(() => {
+      throw new ParseException([
+        {
+          line: 1,
+          message: 'Invalid distance: bananas',
+        },
+      ]);
+    });
+
+    render(<NavigationSolver />);
+
+    solve();
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Line 1: Invalid distance: bananas');
+  });
+
+  it('shows regular error messages', () => {
+    solveNavigationMock.mockImplementation(() => {
+      throw new Error('Regular failure');
+    });
+
+    render(<NavigationSolver />);
+
+    solve();
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Regular failure');
+  });
+
+  it('shows a fallback message for non-error exceptions', () => {
+    solveNavigationMock.mockImplementation(() => {
+      throw 'Unknown failure';
+    });
+
+    render(<NavigationSolver />);
+
+    solve();
+
+    expect(screen.getByRole('alert')).toHaveTextContent('An unexpected error occurred.');
+  });
+
+  it('allows switching back to part one', () => {
     render(<NavigationSolver />);
 
     fireEvent.click(screen.getByRole('button', { name: /part two/i }));
+    fireEvent.click(screen.getByRole('button', { name: /part one/i }));
 
-    fireEvent.change(screen.getByRole('textbox'), {
-      target: { value: sampleInput },
-    });
+    expect(screen.getByRole('button', { name: /part one/i })).toHaveClass('active');
 
-    fireEvent.click(screen.getByRole('button', { name: /solve/i }));
-
-    expect(screen.getByText('900')).toBeInTheDocument();
-  });
-
-  it('shows an error when the input cannot be parsed', () => {
-    render(<NavigationSolver />);
-
-    fireEvent.change(screen.getByRole('textbox'), {
-      target: { value: 'forward bananas' },
-    });
-
-    fireEvent.click(screen.getByRole('button', { name: /solve/i }));
-
-    expect(screen.getByRole('alert')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /part two/i })).not.toHaveClass('active');
   });
 });
