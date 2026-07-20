@@ -1,0 +1,30 @@
+.navigation-solver {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.navigation-solver header {
+  margin-bottom: 2rem;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.navigation-solver textarea {
+  min-height: 200px;
+  resize: vertical;
+}
+
+.result {
+  margin-top: 2rem;
+}
