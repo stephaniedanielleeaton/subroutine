@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { ParseException } from './ParseException';
 import { parseCommands } from './parseCommands';
 
 describe('parseCommands', () => {
@@ -137,45 +138,47 @@ up 2
   });
 
   it('throws for an invalid direction', () => {
-    expect(() => parseCommands('backward 5')).toThrow('Invalid direction: backward');
+    expect(() => parseCommands('backward 5')).toThrow(ParseException);
+    expect(() => parseCommands('backward 5')).toThrow('Line 1: Invalid direction: backward');
   });
 
   it('throws for an invalid distance', () => {
-    expect(() => parseCommands('forward five')).toThrow('Invalid distance: five');
+    expect(() => parseCommands('forward five')).toThrow(ParseException);
+    expect(() => parseCommands('forward five')).toThrow('Line 1: Invalid distance: five');
   });
 
   it('throws for a missing direction', () => {
-    expect(() => parseCommands('5')).toThrow('Invalid command: 5');
+    expect(() => parseCommands('5')).toThrow(ParseException);
+    expect(() => parseCommands('5')).toThrow('Line 1: Invalid command: 5');
   });
 
   it('throws for a missing distance', () => {
-    expect(() => parseCommands('forward')).toThrow('Invalid command: forward');
+    expect(() => parseCommands('forward')).toThrow(ParseException);
+    expect(() => parseCommands('forward')).toThrow('Line 1: Invalid command: forward');
   });
 
   it('throws for too many values', () => {
-    expect(() => parseCommands('forward 5 extra')).toThrow('Invalid command: forward 5 extra');
+    expect(() => parseCommands('forward 5 extra')).toThrow(ParseException);
+    expect(() => parseCommands('forward 5 extra')).toThrow(
+      'Line 1: Invalid command: forward 5 extra',
+    );
   });
 
   it('throws for a decimal distance', () => {
-    expect(() => parseCommands('forward 3.5')).toThrow('Invalid distance: 3.5');
+    expect(() => parseCommands('forward 3.5')).toThrow(ParseException);
+    expect(() => parseCommands('forward 3.5')).toThrow('Line 1: Invalid distance: 3.5');
   });
 
-  it('throws when any command in the input is invalid', () => {
+  it('collects multiple parsing errors', () => {
     expect(() =>
-      parseCommands(`forward 5
-down 3
-backward 2
-up 1`),
-    ).toThrow('Invalid direction: backward');
-  });
-
-  it('throws when any command has an invalid distance', () => {
-    expect(() =>
-      parseCommands(`forward 5
-down 3
-up three
-forward 8`),
-    ).toThrow('Invalid distance: three');
+      parseCommands(`forward five
+backward 3
+up
+forward 8 extra`),
+    ).toThrow(`Line 1: Invalid distance: five
+Line 2: Invalid direction: backward
+Line 3: Invalid command: up
+Line 4: Invalid command: forward 8 extra`);
   });
 
   it('ignores blank lines at the beginning of the input', () => {
@@ -243,6 +246,17 @@ down 3`),
   });
 
   it('throws for unrecognized input', () => {
-    expect(() => parseCommands('!@#$%^&*')).toThrow('Invalid command: !@#$%^&*');
+    expect(() => parseCommands('!@#$%^&*')).toThrow(ParseException);
+    expect(() => parseCommands('!@#$%^&*')).toThrow('Line 1: Invalid command: !@#$%^&*');
+  });
+
+  it('continues parsing after encountering invalid commands', () => {
+    expect(() =>
+      parseCommands(`forward 5
+backward 3
+down 2
+up two`),
+    ).toThrow(`Line 2: Invalid direction: backward
+Line 4: Invalid distance: two`);
   });
 });
