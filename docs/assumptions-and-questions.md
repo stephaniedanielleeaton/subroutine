@@ -4,7 +4,7 @@ These are questions I identified while implementing the solution. Where requirem
 
 ## Questions
 
-- Are distances limited to  whole numbers, or should fractional values be accepted?
+- Are distances limited to whole numbers, or should fractional values be accepted?
 - Should parsing stop at the first invalid command, or report all validation errors at once?
 - Should depth be allowed to become negative, or should it be constrained to zero?
 - Are commands expected to be case-sensitive?
