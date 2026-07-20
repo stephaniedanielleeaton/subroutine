@@ -83,8 +83,8 @@ forward 8`}
 
       {error && (
         <section className="error-panel" role="alert">
-          {error.split('\n').map((line) => (
-            <div key={line} className="error-item">
+          {error.split('\n').map((line, index) => (
+            <div key={`${index}-${line}`} className="error-item">
               <span className="error-bullet" aria-hidden="true">
                 •
               </span>

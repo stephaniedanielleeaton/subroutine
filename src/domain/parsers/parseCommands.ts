@@ -3,6 +3,9 @@ import { ParseException, type ParseError } from './ParseException';
 import { directions } from '../types/Direction';
 import type { Direction } from '../types/Direction';
 
+type DirectionResult = Direction | ParseError;
+type DistanceResult = number | ParseError;
+
 export function parseCommands(input: string): NavigationCommand[] {
   const commands: NavigationCommand[] = [];
   const errors: ParseError[] = [];
@@ -27,24 +30,18 @@ export function parseCommands(input: string): NavigationCommand[] {
       return;
     }
 
-    const direction = tryParseDirection(parts[0]!);
-    const distance = tryParseDistance(parts[1]!);
+    const direction = parseDirection(parts[0]!, index + 1);
+    const distance = parseDistance(parts[1]!, index + 1);
 
-    if (direction === null) {
-      errors.push({
-        line: index + 1,
-        message: `Invalid direction: ${parts[0]}`,
-      });
+    if (isParseError(direction)) {
+      errors.push(direction);
     }
 
-    if (distance === null) {
-      errors.push({
-        line: index + 1,
-        message: `Invalid distance: ${parts[1]}`,
-      });
+    if (isParseError(distance)) {
+      errors.push(distance);
     }
 
-    if (direction !== null && distance !== null) {
+    if (!isParseError(direction) && !isParseError(distance)) {
       commands.push({
         direction,
         distance,
@@ -59,20 +56,30 @@ export function parseCommands(input: string): NavigationCommand[] {
   return commands;
 }
 
-function tryParseDirection(value: string): Direction | null {
+function parseDirection(value: string, line: number): DirectionResult {
   const normalized = value.toLowerCase();
 
   if (directions.includes(normalized as Direction)) {
     return normalized as Direction;
   }
 
-  return null;
+  return {
+    line,
+    message: `Invalid direction: ${value}`,
+  };
 }
 
-function tryParseDistance(value: string): number | null {
+function parseDistance(value: string, line: number): DistanceResult {
   if (!/^-?\d+$/.test(value)) {
-    return null;
+    return {
+      line,
+      message: `Invalid distance: ${value}`,
+    };
   }
 
   return Number(value);
+}
+
+function isParseError(value: unknown): value is ParseError {
+  return typeof value === 'object' && value !== null && 'line' in value && 'message' in value;
 }

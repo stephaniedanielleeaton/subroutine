@@ -249,4 +249,14 @@ down 3`),
     expect(() => parseCommands('!@#$%^&*')).toThrow(ParseException);
     expect(() => parseCommands('!@#$%^&*')).toThrow('Line 1: Invalid command: !@#$%^&*');
   });
+
+  it('continues parsing after encountering invalid commands', () => {
+    expect(() =>
+      parseCommands(`forward 5
+backward 3
+down 2
+up two`),
+    ).toThrow(`Line 2: Invalid direction: backward
+Line 4: Invalid distance: two`);
+  });
 });
