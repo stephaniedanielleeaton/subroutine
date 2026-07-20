@@ -20,17 +20,11 @@ forward 2`;
       }),
     ).toBeInTheDocument();
 
-    expect(
-      screen.getByRole('button', { name: /part one/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /part one/i })).toBeInTheDocument();
 
-    expect(
-      screen.getByRole('button', { name: /part two/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /part two/i })).toBeInTheDocument();
 
-    expect(
-      screen.getByRole('button', { name: /solve/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /solve/i })).toBeInTheDocument();
 
     expect(screen.getByRole('textbox')).toBeInTheDocument();
   });
@@ -38,9 +32,7 @@ forward 2`;
   it('disables solve when the input is empty', () => {
     render(<NavigationSolver />);
 
-    expect(
-      screen.getByRole('button', { name: /solve/i }),
-    ).toBeDisabled();
+    expect(screen.getByRole('button', { name: /solve/i })).toBeDisabled();
   });
 
   it('allows the user to enter navigation commands', () => {
@@ -62,9 +54,7 @@ forward 2`;
       target: { value: sampleInput },
     });
 
-    fireEvent.click(
-      screen.getByRole('button', { name: /solve/i }),
-    );
+    fireEvent.click(screen.getByRole('button', { name: /solve/i }));
 
     expect(screen.getByText('150')).toBeInTheDocument();
   });
@@ -72,17 +62,13 @@ forward 2`;
   it('solves the sample using the part two strategy', () => {
     render(<NavigationSolver />);
 
-    fireEvent.click(
-      screen.getByRole('button', { name: /part two/i }),
-    );
+    fireEvent.click(screen.getByRole('button', { name: /part two/i }));
 
     fireEvent.change(screen.getByRole('textbox'), {
       target: { value: sampleInput },
     });
 
-    fireEvent.click(
-      screen.getByRole('button', { name: /solve/i }),
-    );
+    fireEvent.click(screen.getByRole('button', { name: /solve/i }));
 
     expect(screen.getByText('900')).toBeInTheDocument();
   });
@@ -94,9 +80,7 @@ forward 2`;
       target: { value: 'forward bananas' },
     });
 
-    fireEvent.click(
-      screen.getByRole('button', { name: /solve/i }),
-    );
+    fireEvent.click(screen.getByRole('button', { name: /solve/i }));
 
     expect(screen.getByRole('alert')).toBeInTheDocument();
   });

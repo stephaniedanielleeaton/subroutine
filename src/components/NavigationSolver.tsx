@@ -6,9 +6,7 @@ import { PartOneNavigation } from '../domain/navigation/PartOneNavigation';
 import { PartTwoNavigation } from '../domain/navigation/PartTwoNavigation';
 
 export function NavigationSolver() {
-  const [strategy, setStrategy] = useState<'part-one' | 'part-two'>(
-    'part-one',
-  );
+  const [strategy, setStrategy] = useState<'part-one' | 'part-two'>('part-one');
 
   const [input, setInput] = useState('');
   const [result, setResult] = useState<number | null>(null);
@@ -17,9 +15,7 @@ export function NavigationSolver() {
   function handleSolve() {
     try {
       const navigation =
-        strategy === 'part-one'
-          ? new PartOneNavigation()
-          : new PartTwoNavigation();
+        strategy === 'part-one' ? new PartOneNavigation() : new PartTwoNavigation();
 
       const answer = solveNavigation(input, navigation);
 
@@ -41,10 +37,7 @@ export function NavigationSolver() {
       <header className="hero">
         <h1>USS A20 Navigation Console</h1>
 
-        <p>
-          Please chart your navigation below. Sink or swim, but preferably
-          swim.
-        </p>
+        <p>Please chart your navigation below. Sink or swim, but preferably swim.</p>
       </header>
 
       <section className="panel">
@@ -80,11 +73,7 @@ down 5
 forward 8`}
         />
 
-        <button
-          type="button"
-          onClick={handleSolve}
-          disabled={input.trim() === ''}
-        >
+        <button type="button" onClick={handleSolve} disabled={input.trim() === ''}>
           Solve
         </button>
       </section>

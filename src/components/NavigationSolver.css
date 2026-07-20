@@ -104,7 +104,9 @@ button {
   font-weight: 700;
   cursor: pointer;
 
-  transition: transform 0.15s, opacity 0.15s;
+  transition:
+    transform 0.15s,
+    opacity 0.15s;
 }
 
 button:hover {
