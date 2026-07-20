@@ -75,8 +75,6 @@ forward 2`;
 
     solve('forward bananas');
 
-    expect(screen.getByRole('alert')).toHaveTextContent(
-      'Line 1: Invalid distance: bananas',
-    );
+    expect(screen.getByRole('alert')).toHaveTextContent('Line 1: Invalid distance: bananas');
   });
 });

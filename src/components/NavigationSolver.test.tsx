@@ -40,17 +40,11 @@ describe('NavigationSolver', () => {
       }),
     ).toBeInTheDocument();
 
-    expect(
-      screen.getByRole('button', { name: /part one/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /part one/i })).toBeInTheDocument();
 
-    expect(
-      screen.getByRole('button', { name: /part two/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /part two/i })).toBeInTheDocument();
 
-    expect(
-      screen.getByRole('button', { name: /solve/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /solve/i })).toBeInTheDocument();
 
     expect(screen.getByRole('textbox')).toBeInTheDocument();
     expect(screen.getByText('--')).toBeInTheDocument();
@@ -90,10 +84,7 @@ describe('NavigationSolver', () => {
     solve();
 
     expect(solveNavigationMock).toHaveBeenCalledTimes(1);
-    expect(solveNavigationMock).toHaveBeenCalledWith(
-      'forward 5',
-      expect.anything(),
-    );
+    expect(solveNavigationMock).toHaveBeenCalledWith('forward 5', expect.anything());
 
     expect(screen.getByText('1234')).toBeInTheDocument();
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
@@ -119,11 +110,9 @@ describe('NavigationSolver', () => {
   });
 
   it('clears the previous result when solving fails', () => {
-    solveNavigationMock
-      .mockReturnValueOnce(1234)
-      .mockImplementationOnce(() => {
-        throw new Error('Regular failure');
-      });
+    solveNavigationMock.mockReturnValueOnce(1234).mockImplementationOnce(() => {
+      throw new Error('Regular failure');
+    });
 
     render(<NavigationSolver />);
 
@@ -151,9 +140,7 @@ describe('NavigationSolver', () => {
 
     solve();
 
-    expect(screen.getByRole('alert')).toHaveTextContent(
-      'Line 1: Invalid distance: bananas',
-    );
+    expect(screen.getByRole('alert')).toHaveTextContent('Line 1: Invalid distance: bananas');
   });
 
   it('shows regular error messages', () => {
@@ -177,24 +164,17 @@ describe('NavigationSolver', () => {
 
     solve();
 
-    expect(screen.getByRole('alert')).toHaveTextContent(
-      'An unexpected error occurred.',
-    );
+    expect(screen.getByRole('alert')).toHaveTextContent('An unexpected error occurred.');
   });
 
   it('allows switching back to part one', () => {
-  render(<NavigationSolver />);
+    render(<NavigationSolver />);
 
-  fireEvent.click(screen.getByRole('button', { name: /part two/i }));
-  fireEvent.click(screen.getByRole('button', { name: /part one/i }));
+    fireEvent.click(screen.getByRole('button', { name: /part two/i }));
+    fireEvent.click(screen.getByRole('button', { name: /part one/i }));
 
-  expect(
-    screen.getByRole('button', { name: /part one/i }),
-  ).toHaveClass('active');
+    expect(screen.getByRole('button', { name: /part one/i })).toHaveClass('active');
 
-  expect(
-    screen.getByRole('button', { name: /part two/i }),
-  ).not.toHaveClass('active');
-});
-
+    expect(screen.getByRole('button', { name: /part two/i })).not.toHaveClass('active');
+  });
 });
