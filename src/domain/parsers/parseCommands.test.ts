@@ -127,6 +127,15 @@ up 2
     ]);
   });
 
+  it('accepts a negative distance', () => {
+    expect(parseCommands('forward -5')).toEqual([
+      {
+        direction: 'forward',
+        distance: -5,
+      },
+    ]);
+  });
+
   it('throws for an invalid direction', () => {
     expect(() => parseCommands('backward 5')).toThrow('Invalid direction: backward');
   });
@@ -145,10 +154,6 @@ up 2
 
   it('throws for too many values', () => {
     expect(() => parseCommands('forward 5 extra')).toThrow('Invalid command: forward 5 extra');
-  });
-
-  it('throws for a negative distance', () => {
-    expect(() => parseCommands('forward -5')).toThrow('Invalid distance: -5');
   });
 
   it('throws for a decimal distance', () => {
