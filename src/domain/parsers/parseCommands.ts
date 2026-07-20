@@ -1,38 +1,77 @@
 import type { NavigationCommand } from '../models/NavigationCommand';
+import { ParseException, type ParseError } from './ParseException';
 import { directions } from '../types/Direction';
 import type { Direction } from '../types/Direction';
 
 export function parseCommands(input: string): NavigationCommand[] {
-  return input
-    .split('\n')
-    .filter((line) => line.trim() !== '')
-    .map((line) => {
-      const parts = line.trim().split(/\s+/);
+  const commands: NavigationCommand[] = [];
+  const errors: ParseError[] = [];
 
-      if (parts.length !== 2) {
-        throw new Error(`Invalid command: ${line}`);
-      }
+  const lines = input.split('\n');
 
-      return {
-        direction: parseDirection(parts[0]!),
-        distance: parseDistance(parts[1]!),
-      };
-    });
+  lines.forEach((rawLine, index) => {
+    const line = rawLine.trim();
+
+    if (line === '') {
+      return;
+    }
+
+    const parts = line.split(/\s+/);
+
+    if (parts.length !== 2) {
+      errors.push({
+        line: index + 1,
+        message: `Invalid command: ${rawLine}`,
+      });
+
+      return;
+    }
+
+    const direction = tryParseDirection(parts[0]!);
+    const distance = tryParseDistance(parts[1]!);
+
+    if (direction === null) {
+      errors.push({
+        line: index + 1,
+        message: `Invalid direction: ${parts[0]}`,
+      });
+    }
+
+    if (distance === null) {
+      errors.push({
+        line: index + 1,
+        message: `Invalid distance: ${parts[1]}`,
+      });
+    }
+
+    if (direction !== null && distance !== null) {
+      commands.push({
+        direction,
+        distance,
+      });
+    }
+  });
+
+  if (errors.length > 0) {
+    throw new ParseException(errors);
+  }
+
+  return commands;
 }
 
-function parseDirection(value: string): Direction {
+function tryParseDirection(value: string): Direction | null {
   const normalized = value.toLowerCase();
 
   if (directions.includes(normalized as Direction)) {
     return normalized as Direction;
   }
 
-  throw new Error(`Invalid direction: ${value}`);
+  return null;
 }
 
-function parseDistance(value: string): number {
+function tryParseDistance(value: string): number | null {
   if (!/^-?\d+$/.test(value)) {
-    throw new Error(`Invalid distance: ${value}`);
+    return null;
   }
 
   return Number(value);

@@ -4,6 +4,7 @@ import './NavigationSolver.css';
 import { solveNavigation } from '../application/solveNavigation';
 import { PartOneNavigation } from '../domain/navigation/PartOneNavigation';
 import { PartTwoNavigation } from '../domain/navigation/PartTwoNavigation';
+import { ParseException } from '../domain/parsers/ParseException';
 
 export function NavigationSolver() {
   const [strategy, setStrategy] = useState<'part-one' | 'part-two'>('part-one');
@@ -24,7 +25,9 @@ export function NavigationSolver() {
     } catch (err) {
       setResult(null);
 
-      if (err instanceof Error) {
+      if (err instanceof ParseException) {
+        setError(err.message);
+      } else if (err instanceof Error) {
         setError(err.message);
       } else {
         setError('An unexpected error occurred.');
@@ -79,10 +82,15 @@ forward 8`}
       </section>
 
       {error && (
-        <section className="panel">
-          <div className="alert alert-error" role="alert">
-            {error}
-          </div>
+        <section className="error-panel" role="alert">
+          {error.split('\n').map((line) => (
+            <div key={line} className="error-item">
+              <span className="error-bullet" aria-hidden="true">
+                •
+              </span>
+              <span>{line}</span>
+            </div>
+          ))}
         </section>
       )}
 
