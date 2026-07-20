@@ -31,7 +31,7 @@ function parseDirection(value: string): Direction {
 }
 
 function parseDistance(value: string): number {
-  if (!/^\d+$/.test(value)) {
+  if (!/^-?\d+$/.test(value)) {
     throw new Error(`Invalid distance: ${value}`);
   }
 
