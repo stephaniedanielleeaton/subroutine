@@ -4,7 +4,6 @@ import './NavigationSolver.css';
 import { solveNavigation } from '../application/solveNavigation';
 import { PartOneNavigation } from '../domain/navigation/PartOneNavigation';
 import { PartTwoNavigation } from '../domain/navigation/PartTwoNavigation';
-import { ParseException } from '../domain/parsers/ParseException';
 
 export function NavigationSolver() {
   const [strategy, setStrategy] = useState<'part-one' | 'part-two'>('part-one');
@@ -25,9 +24,7 @@ export function NavigationSolver() {
     } catch (err) {
       setResult(null);
 
-      if (err instanceof ParseException) {
-        setError(err.message);
-      } else if (err instanceof Error) {
+      if (err instanceof Error) {
         setError(err.message);
       } else {
         setError('An unexpected error occurred.');

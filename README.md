@@ -6,7 +6,7 @@ The application parses navigation commands, applies one of two navigation strate
 
 ## Kata
 
-The original kata cna be found in .docs/kata-materials
+The original kata can be found in `docs/kata-materials`. Assumptions and design decisions are documented in `docs/assumptions-and-questions.md`.
 
 ## Requirements
 
@@ -40,7 +40,7 @@ npm test
 Generate a coverage report:
 
 ```bash
-npm run coverage
+npm run test:coverage
 ```
 
 ## Technologies

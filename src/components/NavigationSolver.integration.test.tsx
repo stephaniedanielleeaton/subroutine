@@ -3,6 +3,8 @@ import { fireEvent, render, screen } from '@testing-library/react';
 
 import { NavigationSolver } from './NavigationSolver';
 
+import input from '../../docs/kata-materials/input.txt?raw';
+
 describe('NavigationSolver (integration)', () => {
   const sampleInput = `forward 5
 down 5
@@ -18,6 +20,24 @@ forward 2`;
 
     fireEvent.click(screen.getByRole('button', { name: /solve/i }));
   }
+
+  it('solves the provided kata input using the part one strategy', () => {
+  render(<NavigationSolver />);
+
+  solve(input);
+
+  expect(screen.getByText('264')).toBeInTheDocument();
+});
+
+it('solves the provided kata input using the part two strategy', () => {
+  render(<NavigationSolver />);
+
+  fireEvent.click(screen.getByRole('button', { name: /part two/i }));
+
+  solve(input);
+
+  expect(screen.getByText('352')).toBeInTheDocument();
+});
 
   it('renders the navigation console', () => {
     render(<NavigationSolver />);
