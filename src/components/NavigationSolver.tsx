@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import './NavigationSolver.css';
 
+import kataInput from '../../docs/kata-materials/input.txt?raw';
+
 import { solveNavigation } from '../application/solveNavigation';
 import { PartOneNavigation } from '../domain/navigation/PartOneNavigation';
 import { PartTwoNavigation } from '../domain/navigation/PartTwoNavigation';
@@ -73,9 +75,20 @@ down 5
 forward 8`}
         />
 
-        <button type="button" onClick={handleSolve} disabled={input.trim() === ''}>
-          Solve
-        </button>
+        <div className="input-actions">
+          <button type="button" className="secondary-button" onClick={() => setInput(kataInput)}>
+            Load Kata Input
+          </button>
+
+          <button
+            type="button"
+            className="primary-button"
+            onClick={handleSolve}
+            disabled={input.trim() === ''}
+          >
+            Solve
+          </button>
+        </div>
       </section>
 
       {error && (
