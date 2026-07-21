@@ -181,15 +181,13 @@ describe('NavigationSolver', () => {
   });
 
   it('loads the kata input into the textarea', () => {
-  render(<NavigationSolver />);
+    render(<NavigationSolver />);
 
-  fireEvent.click(screen.getByRole('button', { name: /load kata input/i }));
+    fireEvent.click(screen.getByRole('button', { name: /load kata input/i }));
 
-  const actual = (screen.getByRole('textbox') as HTMLTextAreaElement).value;
-  const expected = kataInput;
+    const actual = (screen.getByRole('textbox') as HTMLTextAreaElement).value;
+    const expected = kataInput;
 
-  expect(actual.replace(/\r\n/g, '\n')).toBe(
-    expected.replace(/\r\n/g, '\n'),
-  );
-});
+    expect(actual.replace(/\r\n/g, '\n')).toBe(expected.replace(/\r\n/g, '\n'));
+  });
 });
