@@ -5,6 +5,8 @@ import { solveNavigation } from '../application/solveNavigation';
 import { NavigationSolver } from './NavigationSolver';
 import { ParseException } from '../domain/parsers/ParseException';
 
+import kataInput from '../../docs/kata-materials/input.txt?raw';
+
 vi.mock('../application/solveNavigation', () => ({
   solveNavigation: vi.fn(),
 }));
@@ -176,5 +178,16 @@ describe('NavigationSolver', () => {
     expect(screen.getByRole('button', { name: /part one/i })).toHaveClass('active');
 
     expect(screen.getByRole('button', { name: /part two/i })).not.toHaveClass('active');
+  });
+
+  it('loads the kata input into the textarea', () => {
+    render(<NavigationSolver />);
+
+    fireEvent.click(screen.getByRole('button', { name: /load kata input/i }));
+
+    const actual = (screen.getByRole('textbox') as HTMLTextAreaElement).value;
+    const expected = kataInput;
+
+    expect(actual.replace(/\r\n/g, '\n')).toBe(expected.replace(/\r\n/g, '\n'));
   });
 });

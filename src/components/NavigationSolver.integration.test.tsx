@@ -22,22 +22,22 @@ forward 2`;
   }
 
   it('solves the provided kata input using the part one strategy', () => {
-  render(<NavigationSolver />);
+    render(<NavigationSolver />);
 
-  solve(input);
+    solve(input);
 
-  expect(screen.getByText('264')).toBeInTheDocument();
-});
+    expect(screen.getByText('264')).toBeInTheDocument();
+  });
 
-it('solves the provided kata input using the part two strategy', () => {
-  render(<NavigationSolver />);
+  it('solves the provided kata input using the part two strategy', () => {
+    render(<NavigationSolver />);
 
-  fireEvent.click(screen.getByRole('button', { name: /part two/i }));
+    fireEvent.click(screen.getByRole('button', { name: /part two/i }));
 
-  solve(input);
+    solve(input);
 
-  expect(screen.getByText('352')).toBeInTheDocument();
-});
+    expect(screen.getByText('352')).toBeInTheDocument();
+  });
 
   it('renders the navigation console', () => {
     render(<NavigationSolver />);
@@ -96,5 +96,24 @@ it('solves the provided kata input using the part two strategy', () => {
     solve('forward bananas');
 
     expect(screen.getByRole('alert')).toHaveTextContent('Line 1: Invalid distance: bananas');
+  });
+
+  it('loads and solves the provided kata input using the part one strategy', () => {
+    render(<NavigationSolver />);
+
+    fireEvent.click(screen.getByRole('button', { name: /load kata input/i }));
+    fireEvent.click(screen.getByRole('button', { name: /solve/i }));
+
+    expect(screen.getByText('264')).toBeInTheDocument();
+  });
+
+  it('loads and solves the provided kata input using the part two strategy', () => {
+    render(<NavigationSolver />);
+
+    fireEvent.click(screen.getByRole('button', { name: /load kata input/i }));
+    fireEvent.click(screen.getByRole('button', { name: /part two/i }));
+    fireEvent.click(screen.getByRole('button', { name: /solve/i }));
+
+    expect(screen.getByText('352')).toBeInTheDocument();
   });
 });

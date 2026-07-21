@@ -154,3 +154,33 @@ button:active {
   font-size: 1.2rem;
   line-height: 1;
 }
+
+.input-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.secondary-button {
+  width: 100%;
+
+  background: transparent;
+  color: #40cfff;
+
+  border: 1px solid #40cfff;
+  border-radius: 0.75rem;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.secondary-button:hover:not(:disabled) {
+  background: rgba(64, 207, 255, 0.08);
+}
+
+.secondary-button:active:not(:disabled) {
+  background: rgba(64, 207, 255, 0.14);
+}
